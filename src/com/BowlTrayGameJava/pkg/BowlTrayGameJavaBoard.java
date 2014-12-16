@@ -53,28 +53,43 @@ class BowlTrayGameJavaBoard {
     public  boolean  doTheMove(int  currentPlayerNum,  
                                int  chosenBowlNum)  {
 		int  bowlNum  =  getBowlNum(currentPlayerNum, chosenBowlNum);
-        int  seeds  =  bowls[bowlNum].removeSeeds();
-        while  (seeds  !=  0)  {
-           bowlNum++;
-           if  (bowlNum  >  totalBowls - 1)
-                   bowlNum  =  0;
-           if  (bowlNum  !=  
-           getTray(otherPlayerNum(currentPlayerNum)))  {
-               bowls[bowlNum].addSeeds(1);
-               seeds--;
-               }
-        }
-        if  (bowlNum  ==  getTray(currentPlayerNum))
-           return  true;
-        if  (ownerOf(bowlNum)  ==  currentPlayerNum  &&
-               bowls[bowlNum].getSeeds()  ==  1)  {
-        	seeds = bowls[bowlNum].removeSeeds();
-        	bowls[getTray(currentPlayerNum)].addSeeds(seeds);
-        	seeds = 0;
-			seeds  =  bowls[oppositeBowlNum(bowlNum)].removeSeeds();
-			bowls[getTray(currentPlayerNum)].addSeeds(seeds);
-        }
-	    return false;
+		if(ownerOf(bowlNum) == currentPlayerNum)
+		{
+			if(!isATray(bowlNum))
+			{
+				int  seeds  =  bowls[bowlNum].removeSeeds();
+				while  (seeds  !=  0)  {
+					bowlNum++;
+					if  (bowlNum  >  totalBowls - 1)
+						bowlNum  =  0;
+					if  (bowlNum  !=  
+							getTray(otherPlayerNum(currentPlayerNum)))  {
+						bowls[bowlNum].addSeeds(1);
+						seeds--;
+					}
+				}
+				if  (bowlNum  ==  getTray(currentPlayerNum))
+					return  true;
+				if  (ownerOf(bowlNum)  ==  currentPlayerNum  &&
+						bowls[bowlNum].getSeeds()  ==  1)  {
+					seeds = bowls[bowlNum].removeSeeds();
+					bowls[getTray(currentPlayerNum)].addSeeds(seeds);
+					seeds  =  bowls[oppositeBowlNum(bowlNum)].removeSeeds();
+					bowls[getTray(currentPlayerNum)].addSeeds(seeds);
+				}
+				return false;
+			}
+			else
+			{
+				System.out.println("cannot move from tray");
+				return true;
+			}
+		}
+		else
+		{
+			System.out.println("cannot move from other player's bowl");
+			return true;	
+		}
 	}
 
 	private  int  ownerOf(int  bowlNum)  {
@@ -114,7 +129,7 @@ class BowlTrayGameJavaBoard {
     }
 
     BowlTrayGameJavaBowl  []  bowls;
-    static  final  int  playingBowls=6,
-                          totalBowls  =  2*(playingBowls+1);
+    final  int  playingBowls=6;
+	final int totalBowls  =  2*(playingBowls+1);
 
 }
